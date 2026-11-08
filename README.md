@@ -34,17 +34,17 @@ whether you would trust it.
 2. **In C and the Soft Margin**, set C to **0.001**, then **1**, then **10000**, and take a
    screenshot of each. Also look at the "Every C at once" chart.
 
-**  - C = 0.001**
+-** C = 0.001**
 
 <img width="582" height="638" alt="image" src="https://github.com/user-attachments/assets/536349b4-cba0-42fa-947d-e7ed2cd6f4a9" />
 
     
-**  - C = 1**
+ - **C = 1**
 
 <img width="572" height="643" alt="image" src="https://github.com/user-attachments/assets/580f79dd-b4d2-4fb4-b985-b44f596a7618" />
 
   
-**  - C = 10,000**
+- **C = 10,000**
 
    <img width="568" height="638" alt="image" src="https://github.com/user-attachments/assets/09180103-94ba-4e29-9f1b-5fd216d62d36" />
 
@@ -64,21 +64,27 @@ whether you would trust it.
 4. **In Multi-class**, keep the linear kernel and C = 1. Take a screenshot showing all three charts
    and the table.
 
-   > 💡 **Hint:** Look at the blue *Middle* class. Can a single straight line separate it from all
-   > three other classes at once?
+<img width="556" height="519" alt="image" src="https://github.com/user-attachments/assets/16828505-6141-4bbe-95bb-2e51030b7df6" />
 
+
+---
 5. **In Second Opinion: Diagnosis**, read the results with the default settings, then switch to
    **All 30 features**. Take a screenshot of each, including the confusion matrix.
 
-   > 💡 **Hint:** In medicine, the two kinds of mistakes are not equally bad. The confusion matrix
-   > spells them out: *missed cancers* and *false alarms*.
+<img width="1232" height="564" alt="image" src="https://github.com/user-attachments/assets/fdaac738-3e6a-4bf8-a5ed-7cba88bdb0f0" />
 
+<img width="1210" height="348" alt="image" src="https://github.com/user-attachments/assets/9439f5c9-9290-4c8f-a482-0e202f36ffaf" />
+
+   
+---
 6. **Still in the Diagnosis tab (all 30 features)**, scroll to the grid search. Choose by
    **Accuracy**, then by **Recall**, and take a screenshot of each heatmap and its test results.
 
-   > 💡 **Hint:** The heatmap is computed only from the training patients. The test patients are used
-   > once, at the end, for the winning combination.
+  <img width="1231" height="550" alt="image" src="https://github.com/user-attachments/assets/992e4840-909d-4061-bf58-ee6592d855e7" />
 
+
+   
+---
 7. **In SVM vs. Logistic Regression**, look at both the two-feature and the 30-feature comparisons,
    and the circles example at the bottom. Take a screenshot of the 30-feature table.
 
