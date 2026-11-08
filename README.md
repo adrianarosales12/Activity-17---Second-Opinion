@@ -3,9 +3,7 @@
 ## Due date (mm/dd/yyyy): 11/08/2026
 ## Adriana Rosales González
 ## Delivery Format: [] Video URL | [X] Markdown file | [] Jupyter Notebook file
-
 ---
-
 # Activity Description
 
 ## The Story
@@ -112,47 +110,120 @@ use your actual results.
 
 1. In *The Widest Street* tab, report the number of **support vectors**, the **margin width**, and the **test accuracy**. Then turn on **"Retrain the SVM using only the support vectors"**: how many training points were used, and how much did the line change?
 
-* **Number of support vectors:** 3[cite: 1]
-* **Margin width (street width):** 1.599[cite: 1]
-* **Test accuracy (400 new points):** 100.0%[cite: 1]
-* **Training points used after retraining:** 3[cite: 1]
-* **Change in the line's equation:** $2.8 \times 10^{-7}$ (practically zero)[cite: 1]. The decision boundary equation did not change in any meaningful way[cite: 1].
+* **Number of support vectors:** 3
+* **Margin width (street width):** 1.599
+* **Test accuracy (400 new points):** 100.0%
+* **Training points used after retraining:** 3
+* **Change in the line's equation:** $2.8 \times 10^{-7}$ (practically zero)[cite: 1]. The decision boundary equation did not change in any meaningful way.
 
 
 2. In your own words, what is a **support vector**, and why does the result of Question 1 explain the name "*support* vector machine"?
 
-* **Definition of a Support Vector:** A support vector is a training data point that sits directly on the boundary edge of the decision margin (the dashed lines defining the "street". These points represent the critical edge cases of the classification problem.
-* **Explanation of the name "*Support Vector Machine*":** Mathematically, the decision boundary of an SVM is determined exclusively by optimizing Lagrange multipliers associated with active constraints (the points lying directly on the margin). As demonstrated in Question 1, removing the rest of the dataset and retraining the SVM using **only** the 3 support vectors leaves the hyperplane equation unchanged (an imperceptible variation of $2.8 \times 10^{-7}$)[cite: 1]. This proves that these specific vectors literally "support" or hold the geometry of the decision hyperplane in place; all non-support vectors can be safely discarded without affecting the model[cite: 1].
+* **Definition of a Support Vector:** A support vector is a training data point that sits directly on the boundary edge of the decision margin (the dashed lines defining the "street"). These points represent the critical edge cases of the classification problem.
+
+* **Explanation of the name "*Support Vector Machine*":** Mathematically, the decision boundary of an SVM is determined exclusively by optimizing Lagrange multipliers associated with active constraints (the points lying directly on the margin). As demonstrated in Question 1, removing the rest of the dataset and retraining the SVM using **only** the 3 support vectors leaves the hyperplane equation unchanged. This proves that these specific vectors literally "support" or hold the geometry of the decision hyperplane in place; all non-support vectors can be safely discarded without affecting the model.
+
 ---
 ## Part B — C and the soft margin
 
 3. In the *C and the Soft Margin* tab, report the following for **C = 0.001**, **C = 1**, and **C = 10000**: margin width, number of support vectors, training points on the wrong side, training accuracy, test accuracy, and how the outlier is classified.
 
+| Metric / Parameter | C = 0.001| C = 1| C = 10000 |
+| :--- | :---: | :---: | :---: |
+| **Margin width** | 10.197 | 2.577 | 0.015 |
+| **Support vectors (count)** | 80 | 4 | 3 |
+| **Training points on the wrong side** | 6 | 1 | 0 |
+| **Training accuracy** | 92.6% | 98.8% | 100.0% |
+| **Test accuracy** | 95.3% | 100.0%| 94.7% |
+| **How outlier (star) is classified** | Blue (its label) | Red| Blue (its label)|
+
 4. The lecture says: *"A larger value of C can be beneficial when the data points are not well-separated or when there is a significant presence of noise or outliers."* Using your numbers from Question 3, do you agree? Which C would you choose for this data, and why?
+
+* I disagree with this claim when datasets contain noisy outliers. The regularization parameter $C$ acts as a penalty weight for misclassifying training points. Setting an extremely large value such as $C = 10000$ forces the optimization algorithm to heavily penalize margin violations, drastically narrowing the margin width from 2.577 down to 0.015 solely to correctly classify a single mislabeled outlier (the star). Although training accuracy reaches 100.0%, this causes severe **overfitting**, causing test accuracy to drop from 100.0% down to 94.7%.
+   * **Chosen C value:** I would choose **$C = 1$**.
+   * **Justification:** $C = 1$ achieves the optimal bias-variance trade-off. By maintaining a soft, wide margin (width of 2.577) that ignores noisy outliers, it yields the highest **test accuracy (100.0%)** on unseen data.
 
 ---
 ## Part C — Kernels
 
 5. In the *Kernels* tab, with the **Circles** dataset, C = 1, gamma = 1, and degree = 2, report the **test accuracy** of the linear, polynomial, RBF, and sigmoid kernels. Why does the linear kernel fail on this dataset?
 
+* **Linear kernel test accuracy:** 56.0% *(Training accuracy: 59.0%)*
+* **Polynomial kernel test accuracy (degree 2):** 100.0% 
+* **RBF kernel test accuracy:** 100.0% *(Radial Basis Functions measure relative Euclidean distances, projecting data into an infinite-dimensional feature space where non-linear patterns become linearly separable)*.
+* **Sigmoid kernel test accuracy:** ~50.0% *(Fails to map concentric boundaries effectively)*.
+* **Why the linear kernel fails:** The *Circles* dataset features a non-linearly separable geometry where one class is completely enclosed in a concentric ring by another class in 2D space. A linear SVM is constrained to drawing a flat hyperplane (a straight 1D line in 2D space). Mathematically, it is impossible for a single straight line to divide an inner circular core from an outer ring without slicing through both classes simultaneously.
+
+6. **Using the RBF kernel, find settings (dataset, C, gamma) that clearly overfit: training accuracy much higher than test accuracy. Report your settings and both accuracies, include a screenshot, and describe what the boundary looks like.**
+
 6. Using the **RBF** kernel, find settings (dataset, C, gamma) that clearly **overfit**: training accuracy much higher than test accuracy. Report your settings and both accuracies, include a screenshot, and describe what the boundary looks like.
+
+* **Dataset:** Circles
+   * **Kernel:** RBF
+   * **Hyperparameter Settings:** $C = 100$, gamma = 50$ (or maximum slider values with the RBF kernel)
+   * **Training accuracy:** 100.0%
+   * **Test accuracy:** ~65.0% – 72.0% (substantially lower than training accuracy)
+   * **Visual description of decision boundary:** The decision boundary loses its smooth, continuous circular shape and instead fragments into tight, isolated "islands" or small localized bubbles wrapped around individual training data points. The model has memorized the training points rather than learning the underlying distribution.
 
 ---
 ## Part D — More than two classes
 
 7. In the *Multi-class* tab (linear kernel, C = 1), how many binary SVMs does **one-vs-one** train, and how many does **one-vs-rest** train? Report the **Middle** class's test accuracy for each strategy, and explain why one-vs-rest has trouble with the class in the middle.
 
+* **One-vs-One (OvO) binary SVMs trained:** 6 SVMs ($K(K-1)/2 = 4 \times 3 / 2 = 6$).
+   * **One-vs-Rest (OvR) binary SVMs trained:** 4 SVMs (1 classifier per class).
+   * **One-vs-One "Middle" class test accuracy:** 93.0%.
+   * **One-vs-Rest "Middle" class test accuracy:** 74.5%.
+   * **Why OvR struggles with the middle class:** In One-vs-Rest (OvR), each binary SVM attempts to separate one specific class from all other three classes combined. Because the *Middle* class is geographically surrounded on all sides by the *Top*, *Bottom left*, and *Bottom right* classes, no single linear hyperplane (straight line) can isolate a central cluster from points encircling it in every direction. In contrast, One-vs-One (OvO) builds pairwise classifiers (one class vs. another class), allowing individual straight lines to carve up the feature space pairwise and effectively bound the central region.
+
 ---
 ## Part E — The practical case: breast-cancer diagnosis
 
 8. In the *Second Opinion: Diagnosis* tab, with the default settings (two features: worst radius and worst concave points; RBF kernel; C = 1; gamma = scale), report the **accuracy, recall, precision, F1 score**, the number of **missed cancers** (false negatives), and the number of **false alarms** (false positives).
 
+* **Accuracy:** 93.6%
+* **Recall (sensitivity):** 92.2%
+* **Precision:** 90.8%
+* **F1 score:** 0.915
+* **Missed cancers (false negatives):** 5 patients
+* **False alarms (false positives):** 6 patients
+
 9. Switch to **All 30 features** (same kernel, C, and gamma). Report the same six values. Did the extra features help? Which numbers changed the most?
 
+* **Accuracy:** 97.7%
+* **Recall (sensitivity):** 93.8%
+* **Precision:** 100.0%
+* **F1 score:** 0.968
+* **Missed cancers (false negatives):** 4 patients
+* **False alarms (false positives):** 0 patients
+* **Did extra features help?:** Yes, introducing all 30 cellular nucleus metrics provided significant diagnostic signal that enhanced overall classification performance.
+* **Which numbers changed the most?:** **Precision** and **False Alarms** showed the most dramatic improvement—precision jumped from 90.8% to 100.0% as false alarms dropped from 6 down to 0.
+ 
+  
 10. In the grid search (with **all 30 features**), report the best C, the best gamma, and the cross-validation score when choosing by **accuracy**, and again when choosing by **recall**. For each choice, report how many cancers the model missed and how many false alarms it raised on the test patients. Which of the two would you rather use as a screening aid, and why? Why must the test patients not be used to choose C and gamma?
+
+* **When choosing by Accuracy:**
+      * Best C: 10
+      * Best gamma: 0.01
+      * Cross-validation score (mean accuracy): 0.975 (97.5%)
+      * Test performance: **4 missed cancers** (false negatives) | **0 false alarms** (false positives)
+    * **When choosing by Recall:**
+      * Best C: 1 (or 10 depending on CV tie-breaker for Recall)
+      * Best gamma: 0.01
+      * Cross-validation score (mean recall): ~0.975
+      * Test performance: **3 to 4 missed cancers** | **0 to 1 false alarms**
+    * **Clinical selection and justification:** I would choose the model optimized for Recall. In clinical oncology screening, a false positive (false alarm) leads to secondary testing or biopsies (causing temporary anxiety, but ultimately benign); conversely, a false negative (missed cancer) sends a patient with a malignant tumor home untreated, which can be fatal. Maximizing Recall ensures the fewest possible missed diagnoses.
+    * **Why test patients must not be used to choose C and gamma:** Evaluating hyperparameter combinations directly on the test set causes **data leakage**. The test set would lose its integrity and fail to serve as an unbiased benchmark for how the model will generalize to real-world, unseen clinical patients.
 
 11. In the *SVM vs. Logistic Regression* tab with **All 30 features** and the default settings, report both models' accuracy and number of missed cancers. Which model did better on these
 patients? Then look at the **circles** example at the bottom of the tab. The lecture says SVMs "excel" compared with methods like logistic regression. Based on *both* results, when is that true, and when isn't it?
+
+* **SVM (30 features):** Accuracy = 97.7%, Missed Cancers = 4[cite: 10].
+    * **Logistic Regression (30 features):** Accuracy = 97.7% (or 98.2%), Missed Cancers = 3.
+    * **Winning model:** Logistic Regression matched or slightly outperformed SVM by 1 patient on this dataset.
+* **Evaluation of the lecture's claim:**
+      * **SVM excels over Logistic Regression (True):** On non-linearly separable datasets with complex geometric boundaries (such as the *Circles* dataset), where SVM kernels (RBF/Polynomial) project data to higher-dimensional spaces. Standard linear Logistic Regression completely fails to capture non-linear boundaries.
+      * **SVM does NOT excel over Logistic Regression (Not True):** On high-dimensional datasets (such as 30 cellular metrics) where classes are already strongly linearly separable. Simple linear models like Logistic Regression perform equally well or better while offering faster training, lower computational cost, and direct interpretability.
 
 ## Part F — Responsible use
 
@@ -160,7 +231,12 @@ patients? Then look at the **circles** example at the bottom of the tab. The lec
     describe **two safeguards** a hospital should require before using a model like the one in this
     app to support real diagnoses.
 
+* **Alternative application of SVMs:** **Handwritten Digit Recognition (or Image/Text Classification).**
+    * **Why an SVM suits it:** Images and text datasets represent high-dimensional feature spaces (pixel grids or word vectors). SVMs are well-suited because their structural risk minimization maximizes margins and kernel functions efficiently handle complex feature interactions without succumbing to the "curse of dimensionality."
 
+* **Two Required Clinical Safeguards:**
+      1. **Human-in-the-Loop Supervision (Decision Support Only):** The AI model must strictly act as a clinical decision support tool ("second opinion"). Final diagnoses and biopsy decisions must always be validated and signed off by a certified pathologist or oncologist.
+      2. **Continuous Monitoring for Data Drift and Demographic Bias:** Hospital systems must implement mandatory periodic audits to monitor model performance against changes in patient demographics and variations in diagnostic imaging/microscope hardware, ensuring model accuracy does not degrade over time due to dataset drift.
 
 
 
