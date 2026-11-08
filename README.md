@@ -82,42 +82,83 @@ whether you would trust it.
 
   <img width="1231" height="550" alt="image" src="https://github.com/user-attachments/assets/992e4840-909d-4061-bf58-ee6592d855e7" />
 
+<img width="1203" height="535" alt="image" src="https://github.com/user-attachments/assets/55ca4c73-a3fb-4049-a8e1-771c7879b075" />
+
+<img width="1229" height="563" alt="image" src="https://github.com/user-attachments/assets/69dc06d3-56c3-42dc-8f9c-eea9af63e3af" />
 
    
 ---
 7. **In SVM vs. Logistic Regression**, look at both the two-feature and the 30-feature comparisons,
    and the circles example at the bottom. Take a screenshot of the 30-feature table.
 
-   > 💡 **Hint:** Read the blue message under the table: it says which model won on these patients,
-   > and by how many patients.
+<img width="569" height="643" alt="image" src="https://github.com/user-attachments/assets/6dbfa169-d0a8-44dc-9c37-10effc15a32f" />
 
+ <img width="578" height="428" alt="image" src="https://github.com/user-attachments/assets/6ee2a716-bab7-4c2f-a8dc-1b362c6e4ce8" />
+ 
+   
+---
 8. **Fill out `A17_ReflectionQuestions.md`**, using the exact numbers from your screenshots, and
    submit it along with your labeled screenshots (a `.zip` with the `.md` file and the images is
    fine).
 
-   > 💡 **Hint:** Before submitting, check each answer against **How Your Grade Is Calculated**
-   > below. It lists exactly what earns full points on every question.
+# Activity 17 — Reflection Questions: Second Opinion (Support Vector Machines)
 
-### How Your Grade Is Calculated
+Answer every question using the app's **default settings**, unless a question tells you to change
+something. Submit this file together with your labeled screenshots — do not just describe the app,
+use your actual results.
 
-Your grade is out of **100 points**, split across the 12 reflection questions. There are three
-kinds of questions, and each kind is graded differently:
 
-- **Exact answers** (Q1, Q3, Q5, Q8, Q9, and the numbers in Q7, Q10, Q11): there is one correct
-  value, read from the app. With the settings the question gives, everyone sees exactly the same
-  numbers. You get full points for correct values and partial credit when some parts are right.
-  Small rounding differences are accepted.
-- **Your own experiment** (Q6): every student's settings are different, so there is no single right
-  number. But the app always gives exactly the same result for the same settings, so any setting you
-  report can be re-run and checked. Numbers that no setting can reproduce get no credit.
-- **Explain in your own words** (Q2, Q4, Q12, and the explanations in Q5, Q7, Q9, Q10, Q11): graded
-  on four levels.
-  - **Excellent:** complete, correct, and supported by your own numbers.
-  - **Proficient:** correct, but missing a required part or not tied to your own numbers.
-  - **Developing:** vague, incomplete, or partly wrong.
-  - **Insufficient:** missing or wrong.
+## Part A — The widest street (margin and support vectors)
+
+1. In *The Widest Street* tab, report the number of **support vectors**, the **margin width**, and the **test accuracy**. Then turn on **"Retrain the SVM using only the support vectors"**: how many training points were used, and how much did the line change?
+
+* **Number of support vectors:** 3[cite: 1]
+* **Margin width (street width):** 1.599[cite: 1]
+* **Test accuracy (400 new points):** 100.0%[cite: 1]
+* **Training points used after retraining:** 3[cite: 1]
+* **Change in the line's equation:** $2.8 \times 10^{-7}$ (practically zero)[cite: 1]. The decision boundary equation did not change in any meaningful way[cite: 1].
+
+
+2. In your own words, what is a **support vector**, and why does the result of Question 1 explain the name "*support* vector machine"?
+
+* **Definition of a Support Vector:** A support vector is a training data point that sits directly on the boundary edge of the decision margin (the dashed lines defining the "street". These points represent the critical edge cases of the classification problem.
+* **Explanation of the name "*Support Vector Machine*":** Mathematically, the decision boundary of an SVM is determined exclusively by optimizing Lagrange multipliers associated with active constraints (the points lying directly on the margin). As demonstrated in Question 1, removing the rest of the dataset and retraining the SVM using **only** the 3 support vectors leaves the hyperplane equation unchanged (an imperceptible variation of $2.8 \times 10^{-7}$)[cite: 1]. This proves that these specific vectors literally "support" or hold the geometry of the decision hyperplane in place; all non-support vectors can be safely discarded without affecting the model[cite: 1].
+---
+## Part B — C and the soft margin
+
+3. In the *C and the Soft Margin* tab, report the following for **C = 0.001**, **C = 1**, and **C = 10000**: margin width, number of support vectors, training points on the wrong side, training accuracy, test accuracy, and how the outlier is classified.
+
+4. The lecture says: *"A larger value of C can be beneficial when the data points are not well-separated or when there is a significant presence of noise or outliers."* Using your numbers from Question 3, do you agree? Which C would you choose for this data, and why?
 
 ---
+## Part C — Kernels
+
+5. In the *Kernels* tab, with the **Circles** dataset, C = 1, gamma = 1, and degree = 2, report the **test accuracy** of the linear, polynomial, RBF, and sigmoid kernels. Why does the linear kernel fail on this dataset?
+
+6. Using the **RBF** kernel, find settings (dataset, C, gamma) that clearly **overfit**: training accuracy much higher than test accuracy. Report your settings and both accuracies, include a screenshot, and describe what the boundary looks like.
+
+---
+## Part D — More than two classes
+
+7. In the *Multi-class* tab (linear kernel, C = 1), how many binary SVMs does **one-vs-one** train, and how many does **one-vs-rest** train? Report the **Middle** class's test accuracy for each strategy, and explain why one-vs-rest has trouble with the class in the middle.
+
+---
+## Part E — The practical case: breast-cancer diagnosis
+
+8. In the *Second Opinion: Diagnosis* tab, with the default settings (two features: worst radius and worst concave points; RBF kernel; C = 1; gamma = scale), report the **accuracy, recall, precision, F1 score**, the number of **missed cancers** (false negatives), and the number of **false alarms** (false positives).
+
+9. Switch to **All 30 features** (same kernel, C, and gamma). Report the same six values. Did the extra features help? Which numbers changed the most?
+
+10. In the grid search (with **all 30 features**), report the best C, the best gamma, and the cross-validation score when choosing by **accuracy**, and again when choosing by **recall**. For each choice, report how many cancers the model missed and how many false alarms it raised on the test patients. Which of the two would you rather use as a screening aid, and why? Why must the test patients not be used to choose C and gamma?
+
+11. In the *SVM vs. Logistic Regression* tab with **All 30 features** and the default settings, report both models' accuracy and number of missed cancers. Which model did better on these
+patients? Then look at the **circles** example at the bottom of the tab. The lecture says SVMs "excel" compared with methods like logistic regression. Based on *both* results, when is that true, and when isn't it?
+
+## Part F — Responsible use
+
+12. Name one other application of SVMs mentioned in the lecture and explain why an SVM suits it. Then
+    describe **two safeguards** a hospital should require before using a model like the one in this
+    app to support real diagnoses.
 
 
 
